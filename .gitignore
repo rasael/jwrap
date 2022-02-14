@@ -1,0 +1,10 @@
+# ignore the target directory
+target/
+.idea/
+
+# ignore all files ending with ~
+*~
+/resource
+*.log
+/src/main/java/snippet/*.*
+/gitrename
