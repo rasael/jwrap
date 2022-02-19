@@ -18,6 +18,8 @@ package net.bervini.rasael.jwrap.util;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.function.Predicate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CharSequencesTest {
@@ -71,5 +73,38 @@ class CharSequencesTest {
         .isEqualTo('d');
     assertThat(CharSequences.at("dog",-4))
         .isNull();
+  }
+
+  @Test
+  void containsHtml5Tags() {
+    assertThat(CharSequences.containsHtml5Tags("""
+        """)).isFalse();
+    assertThat(CharSequences.containsHtml5Tags("""
+        </>""")).isFalse();
+    assertThat(CharSequences.containsHtml5Tags("""
+        Bla </> </>""")).isFalse();
+    assertThat(CharSequences.containsHtml5Tags("""
+        hello""")).isFalse();
+
+    assertThat(CharSequences.containsHtml5Tags("""
+        if (i<a && c>3)""")).isFalse();
+
+    assertThat(CharSequences.containsHtml5Tags("<b>hello</B>")).isTrue();
+
+    assertThat((Predicate<CharSequence>) CharSequences::containsHtml5Tags)
+        .rejects("a","<a>","< a/>","some <text>",
+            "some <text attribute='<br/>'>",
+            "some <text attribute=\"<br/>\">")
+        .accepts(
+            "<br />",
+            "<br/>",
+            "<b>hello</B>",
+            "<b href='bla'>hello</b>",
+            "some <text attribute></text>",
+            "some <text attribute ></text>",
+            "some <text attribute ></tEXt >",
+            "some <text attribute='hello' ></text >",
+            "some <text attribute=\"hello\" ></text >"
+        );
   }
 }

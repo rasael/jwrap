@@ -16,6 +16,7 @@
 
 package net.bervini.rasael.jwrap.api;
 
+import net.bervini.rasael.jwrap.annotation.Beta;
 import net.bervini.rasael.jwrap.annotation.Tested;
 import net.bervini.rasael.jwrap.util.CharSequences;
 import net.bervini.rasael.jwrap.util.Characters;
@@ -124,6 +125,13 @@ public abstract class AbstractCharSequenceWrap<
     return c!=null ? c : Nulls.rule().get(c);
   }
 
+
+  /**
+   * <p>Returns a String representing the character at the given {@code index}.
+   *
+   * <p>This method accepts negative indexes, which are computed from the end of this CharSequence
+   * @param index the index in this string, which can be negative
+   */
   public String at(int index) {
     return Characters.toString(CharSequences.at(value, index));
   }
@@ -152,5 +160,10 @@ public abstract class AbstractCharSequenceWrap<
   @Override
   public String toString() {
     return String.valueOf(value);
+  }
+
+  @Beta
+  public boolean containsHtml5() {
+    return CharSequences.containsHtml5Tags(value);
   }
 }

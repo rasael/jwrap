@@ -217,4 +217,22 @@ class StringWrapTest {
     assertThat($("hello wo |rl d|").splitQuoted('|'))
         .containsExactly("hello","wo","|rl d|");
   }
+
+  @Test
+  void at() {
+    var str = "Rasael";
+    assertThat($(str).at(0)).isEqualTo("R");
+    assertThat($(str).at(5)).isEqualTo("l");
+    assertThat($(str).at(6)).isNull();
+
+    assertThat($(str).at(-1)).isEqualTo("l");
+    assertThat($(str).at(-6)).isEqualTo("R");
+    assertThat($(str).at(-7)).isNull();
+  }
+
+  @Test
+  void containsHtml5() {
+    assertThat($("""
+        hello <b>world</b>""").containsHtml5()).isTrue();
+  }
 }

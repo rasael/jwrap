@@ -17,6 +17,8 @@
 package net.bervini.rasael.jwrap.util;
 
 import javax.annotation.ParametersAreNullableByDefault;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 @ParametersAreNullableByDefault
@@ -87,5 +89,70 @@ public class CharSequences {
       return -1;
 
     return index;
+  }
+
+
+  public static boolean containsHtml5Tags(CharSequence input) {
+    if (input==null || input.length()<4)
+      return false; // min detection length is 4, eg. <a/>
+
+    char prev;
+    char current = 0;
+    char quoteChar = 0;
+    boolean inQuote = false;
+    boolean inTag = false;
+    boolean inTagName = false;
+    StringBuilder tagName = new StringBuilder();
+    List<String> tagNames = new LinkedList<>();
+
+    for (int i=0, l=input.length();i<l;i++) {
+      prev = current;
+      current = input.charAt(i);
+
+      if (inQuote) {
+        if (current==quoteChar && prev!='\\') inQuote = false;
+      }
+      else if (current=='<') {
+        if (inTag) return false; // < inside of a tag is invalid, not HTML
+        inTag = true;
+        inTagName = true;
+        tagName.setLength(0);
+      }
+      else if (current=='>') {
+        if (!inTag) return false; // > outside of a tag is invalid, not HTML
+        if (inTagName) {
+          // we were still in the tag name (eg. <a>)
+          String name = tagName.toString();
+          if (Strings.isBlank(name)) return false; // no tag name is invalid, not HTML
+          if (name.charAt(0)=='/') return OfStrings.containsIgnoreCase(tagNames, name.substring(1)); // closing an non-open tag is invalid, not HTML
+          tagNames.add(name);
+          inTagName = false;
+        }
+        if (prev=='/') return true; // well formatted tag
+        inTag = false;
+      }
+      else if (inTagName) {
+        if (!Character.isWhitespace(current)) {
+          tagName.append(current);
+        }
+        else if (tagName.length()==0) {
+          return false; // space between '<' and the tag name, not HTML
+        }
+        else {
+          // tag name was completed
+          String name = tagName.toString();
+          if (Strings.isBlank(name)) return false; // no tag name is invalid, not HTML
+          if (name.charAt(0)=='/') return OfStrings.containsIgnoreCase(tagNames, name.substring(1)); // closing an non-open tag is invalid, not HTML
+          tagNames.add(name);
+          inTagName = false;
+        }
+      }
+      else if (inTag && (current=='\'' || current=='\"')) {
+        inQuote = true;
+        quoteChar = current;
+      }
+    }
+
+    return false;
   }
 }
