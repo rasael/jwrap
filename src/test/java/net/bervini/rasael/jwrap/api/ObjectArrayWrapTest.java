@@ -136,6 +136,22 @@ class ObjectArrayWrapTest {
   }
 
   @Test
+  void isNullOrEmpty() {
+    assertThat($(NULL_ARRAY).isNullOrEmpty()).isTrue();
+    assertThat($(EMPTY_ARRAY).isNullOrEmpty()).isTrue();
+
+    assertThat($(newAbcArray()).isNullOrEmpty()).isFalse();
+  }
+
+  @Test
+  void isNotEmpty() {
+    assertThat($(NULL_ARRAY).isNotEmpty()).isFalse();
+    assertThat($(EMPTY_ARRAY).isNotEmpty()).isFalse();
+
+    assertThat($(newAbcArray()).isNotEmpty()).isTrue();
+  }
+
+  @Test
   void fill() {
     String[] array = {"a","b","c"};
     assertThat($(array).fill("z").get())
@@ -270,11 +286,11 @@ class ObjectArrayWrapTest {
   void splice2() {
     // From start 0 - delete count [-1..4]
     assertThat($(newAbcArray()).splice(0, -1).get())
-        .containsExactly("a","b","c");
+        .containsExactly("a", "b", "c");
     assertThat($(newAbcArray()).splice(0, 0).get())
-        .containsExactly("a","b","c");
+        .containsExactly("a", "b", "c");
     assertThat($(newAbcArray()).splice(0, 1).get())
-        .containsExactly("b","c");
+        .containsExactly("b", "c");
     assertThat($(newAbcArray()).splice(0, 2).get())
         .containsExactly("c");
     assertThat($(newAbcArray()).splice(0, 3).get())
@@ -284,13 +300,13 @@ class ObjectArrayWrapTest {
 
     // From start 1 - delete count [-1..4]
     assertThat($(newAbcArray()).splice(1, -1).get())
-        .containsExactly("a","b","c");
+        .containsExactly("a", "b", "c");
     assertThat($(newAbcArray()).splice(1, 0).get())
-        .containsExactly("a","b","c");
+        .containsExactly("a", "b", "c");
 
     // [a,b,c].splice(1,1) => [a, c]
     assertThat($(newAbcArray()).splice(1, 1).get())
-        .containsExactly("a","c");
+        .containsExactly("a", "c");
 
     // [a,b,c].splice(1,[2..~]) => [a]
     assertThat($(newAbcArray()).splice(1, 2).get())
@@ -302,13 +318,13 @@ class ObjectArrayWrapTest {
 
     // From start -1 - delete count [-1..4]
     assertThat($(newAbcArray()).splice(-1, -1).get())
-        .containsExactly("a","b","c");
+        .containsExactly("a", "b", "c");
     assertThat($(newAbcArray()).splice(-1, 0).get())
-        .containsExactly("a","b","c");
+        .containsExactly("a", "b", "c");
 
     // [a,b,c].splice(-1,1) => [a,b]
     assertThat($(newAbcArray()).splice(-1, 1).get())
-        .containsExactly("a","b");
+        .containsExactly("a", "b");
 
     // [a,b,c].splice(-1,2) => [a,b]
     assertThat($(newAbcArray()).splice(-1, 2).get())
@@ -325,14 +341,17 @@ class ObjectArrayWrapTest {
     assertThat($(newAbcArray()).splice(0, 4).get())
         .isEmpty();
 
-    assertThat($(NULL_ARRAY).splice(0,0).get()).isNull();
+    assertThat($(NULL_ARRAY).splice(0, 0).get()).isNull();
 
 
-    assertThat($(newAbcArray()).splice(0,0,"z"))
-        .contains("z","a","b","c");
-    assertThat($(newAbcArray()).splice(0,1,"z"))
-        .contains("z","b","c");
+    assertThat($(newAbcArray()).splice(0, 0, "z"))
+        .contains("z", "a", "b", "c");
+    assertThat($(newAbcArray()).splice(0, 1, "z"))
+        .contains("z", "b", "c");
+  }
 
+  @Test
+  void spliceTo() {
     var list = Lists.<String>newList();
     var spliced = $(newAbcArray()).spliceTo(list, 0,1);
     assertThat(spliced.get()).containsExactly("b","c");

@@ -96,4 +96,5 @@ public abstract class AbstractListWrap<
     return Lists.shift(value);
   }
 
+
 }
