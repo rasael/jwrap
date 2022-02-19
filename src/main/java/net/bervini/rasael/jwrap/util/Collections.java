@@ -16,6 +16,7 @@
 
 package net.bervini.rasael.jwrap.util;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +31,6 @@ public class Collections {
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  @SuppressWarnings("unchecked")
   public static <T> List<T> emptyList() {
     return Lists.empty();
   }
@@ -74,16 +74,19 @@ public class Collections {
     return value.isEmpty();
   }
 
-  public static <E> E[] toArray(Collection<E> value, IntFunction<E[]> generator) {
+  public static <E> E[] toArray(Collection<E> value, @Nonnull IntFunction<E[]> generator) {
+    Preconditions.requireArgNonNull(generator);
+
     if (value==null)
-      return null;
+      return generator.apply(0);
 
     return value.toArray(generator);
   }
 
+  @Nonnull
   public static <T> List<T> unmodifiableList(List<? extends T> list) {
     if (list==null)
-      return emptyList();
+      list = emptyList();
 
     return java.util.Collections.unmodifiableList(list);
   }

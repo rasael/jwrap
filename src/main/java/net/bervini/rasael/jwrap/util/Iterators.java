@@ -18,6 +18,7 @@ package net.bervini.rasael.jwrap.util;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Iterators {
 
@@ -38,6 +39,18 @@ public class Iterators {
 
   public static <E> Iterator<E> synchronizedIterator(Iterator<E> iterator) {
     return new SynchronizedIterator<>(iterator);
+  }
+
+  @SafeVarargs
+  public static <T> Iterator<T> of(T... values) {
+    if (values==null)
+      return empty();
+
+    return Stream.of(values).iterator();
+  }
+
+  public static <T> Iterator<T> singleton(T value) {
+    return Stream.of(value).iterator();
   }
 
   private static class IndexedIterator<E> implements Iterator<Map.Entry<Integer,E>> {
