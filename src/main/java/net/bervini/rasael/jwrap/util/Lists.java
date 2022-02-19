@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.RandomAccess;
 
 public class Lists {
 
@@ -179,14 +180,14 @@ public class Lists {
     return !Comparison.areEqual(list.get(index), element);
   }
 
-  public static void remove(List<?> list, int index) {
+  public static Object remove(List<?> list, int index) {
     if (list==null)
-      return;
+      return null;
 
     if (!isListIndexValid(list, index))
-      return;
+      return null;
 
-    list.remove(index);
+    return list.remove(index);
   }
 
   public static <E> List<E> clone(List<E> value) {
@@ -201,10 +202,11 @@ public class Lists {
   }
 
   private static <E> List<E> createClone(List<E> list) {
-    if (list instanceof LinkedList)
-      return new LinkedList<>(list);
+    if (list instanceof RandomAccess) {
+      return newList(list);
+    }
 
-    return newList(list);
+    return list!=null ? new LinkedList<>(list) : new LinkedList<>();
   }
 
   public static <T> List<T> newListOrNull(T[] array) {
@@ -229,10 +231,10 @@ public class Lists {
   }
 
   public static <E> List<E> unshift(List<E> list, E element) {
-    if (isEmpty(list))
+    if (list==null)
       return newList(element);
 
-    list.add(element);
+    list.add(0, element);
     return list;
   }
   public static boolean isEmpty(List<?> list) {
@@ -266,8 +268,13 @@ public class Lists {
     return asView ? subList : Lists.newList(subList);
   }
 
-  public static <E> void push(List<E> list, List<E> items) {
-    if (isEmpty(list))
+  @SafeVarargs
+  public static <E> void push(List<E> list, E... items) {
+    pushAll(list, Arrays.asList(items));
+  }
+
+  public static <E> void pushAll(List<E> list, Iterable<E> items) {
+    if (Iterables.isEmpty(items))
       return;
 
     Lists.addAll(list, items);
