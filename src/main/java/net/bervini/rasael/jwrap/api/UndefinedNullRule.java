@@ -16,20 +16,18 @@
 
 package net.bervini.rasael.jwrap.api;
 
-import net.bervini.rasael.jwrap.util.Preconditions;
+import javax.annotation.Nullable;
 
-public class Nulls {
+/**
+ * <p>Null rule that returns 'undefined' instead of null.
+ *
+ * <p>Since Java does not support the 'undefined' type, this results in a ClassCastException which includes automatically
+ * the information regarding the source type.
+ */
+public class UndefinedNullRule implements NullRule {
 
-  private Nulls(){}
-
-  private static NullRule nullRule = new UndefinedNullRule(); // new DefaultNullRule();
-
-  public static NullRule rule() {
-    return nullRule;
-  }
-
-  public static void setNullRule(NullRule nullRule) {
-    Preconditions.requireArgNonNull(nullRule);
-    Nulls.nullRule = nullRule;
+  @Override
+  public char get(@Nullable Character c) {
+    return c!=null ? c : undefined.get(); // class cast exception to 'undefined'
   }
 }

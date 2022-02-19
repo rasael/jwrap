@@ -19,12 +19,7 @@ package net.bervini.rasael.jwrap.api;
 public class DefaultNullRule implements NullRule {
 
   @Override
-  public Character get(Character c) {
+  public char get(Character c) {
     return c; // return null as null (can create NPE on unboxing)
-  }
-
-  @Override
-  public boolean nullIsLess() {
-    return true;
   }
 }

@@ -31,11 +31,14 @@ public interface NullRule {
    * <p>If the value is null, this rule may return a default value, throw a meaningful exception, or return null
    * (possibly causing a {@link NullPointerException} elsewhere in the code).
    */
-  @Nullable
-  Character get(@Nullable Character c);
+  char get(@Nullable Character c);
 
   /**
    * Returns true if {@code null} compares lower than a non null value
+   *
+   * @implNote default implementation returns {@code true}.
    */
-  boolean nullIsLess();
+  default boolean nullIsLess() {
+    return true;
+  }
 }

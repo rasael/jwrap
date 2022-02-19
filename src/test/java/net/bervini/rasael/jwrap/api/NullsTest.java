@@ -16,20 +16,24 @@
 
 package net.bervini.rasael.jwrap.api;
 
-import net.bervini.rasael.jwrap.util.Preconditions;
+import org.junit.jupiter.api.Test;
 
-public class Nulls {
+import static org.assertj.core.api.Assertions.*;
 
-  private Nulls(){}
+class NullsTest {
 
-  private static NullRule nullRule = new UndefinedNullRule(); // new DefaultNullRule();
-
-  public static NullRule rule() {
-    return nullRule;
+  @Test
+  void rule() {
+    assertThat(Nulls.rule()).isNotNull();
   }
 
-  public static void setNullRule(NullRule nullRule) {
-    Preconditions.requireArgNonNull(nullRule);
-    Nulls.nullRule = nullRule;
+  @Test
+  void setNullRule() {
+    assertThatThrownBy(() -> Nulls.setNullRule(null))
+        .isInstanceOf(IllegalArgumentException.class);
+
+    assertThatCode(() -> Nulls.setNullRule(Nulls.rule()))
+        .doesNotThrowAnyException();
+
   }
 }

@@ -16,20 +16,13 @@
 
 package net.bervini.rasael.jwrap.api;
 
-import net.bervini.rasael.jwrap.util.Preconditions;
+public class UndefinedReferenceException extends JWrapException {
 
-public class Nulls {
-
-  private Nulls(){}
-
-  private static NullRule nullRule = new UndefinedNullRule(); // new DefaultNullRule();
-
-  public static NullRule rule() {
-    return nullRule;
+  public UndefinedReferenceException() {
+    super("undefined reference");
   }
 
-  public static void setNullRule(NullRule nullRule) {
-    Preconditions.requireArgNonNull(nullRule);
-    Nulls.nullRule = nullRule;
+  public UndefinedReferenceException(String reference) {
+    super("undefined reference to <" + reference + ">");
   }
 }
