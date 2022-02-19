@@ -19,6 +19,7 @@ package net.bervini.rasael.jwrap.util;
 import net.bervini.rasael.jwrap.annotation.Beta;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 @Beta
 public class Comparison {
@@ -26,7 +27,10 @@ public class Comparison {
   private Comparison(){}
   
   // -------------------------------------------------------------------------------------------------------------------
-  
+  public static <T> Predicate<T> isEqualTo(Object obj) {
+    return t -> areEqual(t, obj);
+  }
+
   public static boolean areEqual(Object obj, Object other) {
     if (obj==null) {
       return other==null;

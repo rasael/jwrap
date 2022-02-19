@@ -18,6 +18,7 @@ package net.bervini.rasael.jwrap.util;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -95,5 +96,35 @@ class IterablesTest {
   void test() {
     List<? super CharSequence> list = Lists.newList();
     list.add("a");
+  }
+
+  @Test
+  void size() {
+    assertThat(Iterables.size(null)).isZero();
+    assertThat(Iterables.size(Collections.emptyList())).isZero();
+    assertThat(Iterables.size(() -> Collections.emptyList().iterator())).isZero();
+
+    assertThat(Iterables.size(() -> Arrays.asList("a").iterator())).isOne();
+    assertThat(Iterables.size(() -> Arrays.asList("a","b").iterator())).isEqualTo(2);
+
+    assertThat(Iterables.size(Iterables.empty())).isZero();
+
+    var iterable = new HashSet<Object>(0);
+    assertThat(Iterables.size(Iterables.like(iterable))).isZero();
+  }
+
+  @Test
+  void isEmpty() {
+    assertThat(Iterables.isEmpty(null)).isTrue();
+    assertThat(Iterables.isEmpty(Collections.emptyList())).isTrue();
+    assertThat(Iterables.isEmpty(() -> Collections.emptyList().iterator())).isTrue();
+
+    assertThat(Iterables.isEmpty(() -> Arrays.asList("a").iterator())).isFalse();
+    assertThat(Iterables.isEmpty(() -> Arrays.asList("a","b").iterator())).isFalse();
+
+    assertThat(Iterables.isEmpty(Iterables.empty())).isTrue();
+
+    var iterable = new HashSet<Object>(0);
+    assertThat(Iterables.isEmpty(Iterables.like(iterable))).isTrue();
   }
 }

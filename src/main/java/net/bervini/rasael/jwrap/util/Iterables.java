@@ -16,6 +16,8 @@
 
 package net.bervini.rasael.jwrap.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.util.Collection;
@@ -110,7 +112,7 @@ public class Iterables {
     return iterable==null || isEmpty(iterable);
   }
 
-  public static int size(Iterable<?> iterable) {
+  public static <T> int size(Iterable<T> iterable) {
     if (iterable==null)
       return 0;
 
@@ -132,14 +134,14 @@ public class Iterables {
     return counter;
   }
 
-  public static boolean isEmpty(Iterable<?> iterable) {
+  public static <T> boolean isEmpty(Iterable<T> iterable) {
     if (iterable==null)
       return true;
 
     if (iterable instanceof Collection<?> c)
       return c.isEmpty();
 
-    return iterable.iterator().hasNext();
+    return !iterable.iterator().hasNext();
   }
 
   public static <E> boolean contains(Iterable<E> iterable, Iterable<E> sequence) {
@@ -161,10 +163,28 @@ public class Iterables {
     if (iterable==null)
       return false;
 
-    return Streams.stream(iterable).anyMatch(e -> Comparison.areEqual(e, value));
+    return Streams.stream(iterable).anyMatch(Comparison.isEqualTo(value));
   }
 
   public static <T> T[] toArray(Iterable<T> iterable, IntFunction<T[]> generator) {
     return Lists.newList(iterable).toArray(generator);
+  }
+
+  public static <T> Iterable<T> like(Iterable<T> iterable) {
+    if (iterable==null)
+      return empty();
+
+    return new Iterable<T>() {
+      @NotNull
+      @Override
+      public Iterator<T> iterator() {
+        return iterable.iterator();
+      }
+
+      @Override
+      public Spliterator<T> spliterator() {
+        return iterable.spliterator();
+      }
+    };
   }
 }
