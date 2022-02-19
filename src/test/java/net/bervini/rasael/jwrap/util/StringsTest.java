@@ -97,4 +97,14 @@ class StringsTest {
     assertThat(Strings.endsWithIgnoreCase("abc", "aBd"))
         .isFalse();
   }
+
+  @Test
+  void concat() {
+    assertThat(Strings.concat(null)).isEqualTo("null");
+    assertThat(Strings.concat(Strings.EMPTY)).isEmpty();
+    assertThat(Strings.concat(Strings.EMPTY, Strings.EMPTY)).isEmpty();
+
+    assertThat(Strings.concat(Strings.EMPTY, "a","b",null,"c")).isEqualTo("abnullc");
+    assertThat(Strings.concat("hello"," ", "w","orl","D")).isEqualTo("hello worlD");
+  }
 }

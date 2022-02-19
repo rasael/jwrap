@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package net.bervini.rasael.jwrap.api;
+package net.bervini.rasael.jwrap.util;
 
-public class DefaultNullRule implements NullRule {
+public class OfStrings {
 
-  @Override
-  public Character get(Character c) {
-    return c; // return null as null (can create NPE on unboxing)
-  }
+  private OfStrings(){}
 
-  @Override
-  public boolean nullIsLess() {
-    return true;
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static boolean containsIgnoreCase(Iterable<String> strings, String substring) {
+    if (strings==null)
+      return false;
+
+    for (String string : strings) {
+      if (string.equalsIgnoreCase(substring))
+        return true;
+    }
+
+    return false;
   }
 }

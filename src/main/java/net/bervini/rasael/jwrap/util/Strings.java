@@ -16,6 +16,7 @@
 
 package net.bervini.rasael.jwrap.util;
 
+import net.bervini.rasael.jwrap.api.Nulls;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.ParametersAreNullableByDefault;
@@ -37,15 +38,9 @@ public class Strings {
 
   private static final String[] EMPTY_ARRAY = {};
 
-  private static boolean nullIsLess = true;
-
   private Strings(){}
 
   // -------------------------------------------------------------------------------------------------------------------
-
-  public static void setNullIsLess(boolean nullIsLess) {
-    Strings.nullIsLess = nullIsLess; //TODO temporary solution, a NullRule class is more appropriate
-  }
 
   // -------------------------------------------------------------------------------------------------------------------
 
@@ -90,7 +85,7 @@ public class Strings {
   }
 
   public static int compare(CharSequence a, CharSequence b) {
-    return StringUtils.compare(orNull(a), orNull(b), nullIsLess);
+    return StringUtils.compare(orNull(a), orNull(b), Nulls.rule().nullIsLess());
   }
 
   public static String orNull(CharSequence s) {
@@ -98,7 +93,7 @@ public class Strings {
   }
 
   public static int compareIgnoreCase(CharSequence a, CharSequence b) {
-    return StringUtils.compareIgnoreCase(orNull(a), orNull(b), nullIsLess);
+    return StringUtils.compareIgnoreCase(orNull(a), orNull(b), Nulls.rule().nullIsLess());
   }
 
   public static String trim(String value) {

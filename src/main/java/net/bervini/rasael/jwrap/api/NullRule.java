@@ -16,8 +16,26 @@
 
 package net.bervini.rasael.jwrap.api;
 
+import javax.annotation.Nullable;
+
+/**
+ * <p>Allows to configure how nulls are handled by jwrap, when no meaningful alternative is available.
+ *
+ * <p>This class provides null values for all boxed primitive types, and rules on how to compare null
+ */
 public interface NullRule {
 
-  Character get(Character c);
+  /**
+   * <p>Handle a possible null {@link Character} value.
+   *
+   * <p>If the value is null, this rule may return a default value, throw a meaningful exception, or return null
+   * (possibly causing a {@link NullPointerException} elsewhere in the code).
+   */
+  @Nullable
+  Character get(@Nullable Character c);
 
+  /**
+   * Returns true if {@code null} compares lower than a non null value
+   */
+  boolean nullIsLess();
 }
