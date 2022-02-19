@@ -16,16 +16,15 @@
 
 package net.bervini.rasael.jwrap.util;
 
-import javax.annotation.ParametersAreNullableByDefault;
+import org.junit.jupiter.api.Test;
 
-@ParametersAreNullableByDefault
-public class Characters {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  private Characters(){}
+class CharactersTest {
 
-  // -------------------------------------------------------------------------------------------------------------------
-
-  public static String toString(Character c){
-    return c!=null ? c.toString() : null;
+  @Test
+  void testToString() {
+    assertThat(Characters.toString(null)).isNull();
+    assertThat(Characters.toString('c')).isEqualTo("c");
   }
 }
