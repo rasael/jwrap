@@ -22,6 +22,7 @@ import net.bervini.rasael.jwrap.util.IntObjConsumer;
 import net.bervini.rasael.jwrap.util.Iterators;
 import net.bervini.rasael.jwrap.util.Lists;
 import net.bervini.rasael.jwrap.util.Predicates;
+import net.bervini.rasael.jwrap.util.Splice;
 import net.bervini.rasael.jwrap.util.Spliterators;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
@@ -29,9 +30,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNullableByDefault;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
@@ -115,7 +116,7 @@ public abstract class AbstractObjectArrayWrap<
 
   @Tested
   public SELF splice() {
-    set(Arrays.splice(value));
+    set(Splice.splice(value));
     return myself;
   }
 
@@ -131,7 +132,7 @@ public abstract class AbstractObjectArrayWrap<
    * @return
    */
   public SELF splice(int start) {
-    set(Arrays.splice(value, start));
+    set(Splice.splice(value, start).result());
     return myself;
   }
 
@@ -156,17 +157,17 @@ public abstract class AbstractObjectArrayWrap<
    * @return
    */
   public SELF splice(int start, int deleteCount, ELEMENT... items) {
-    set(Arrays.splice(value, start, deleteCount, items));
+    set(Splice.splice(value, start, deleteCount, items).result());
     return myself;
   }
 
-  public SELF spliceTo(List<ELEMENT> removed, int start) {
-    set(Arrays.spliceToList(value, start, removed));
+  public SELF spliceTo(Collection<ELEMENT> removed, int start) {
+    set(Splice.spliceTo(value, start, removed));
     return myself;
   }
 
-  public SELF spliceTo(List<ELEMENT> removed, int start, int deleteCount, ELEMENT... items) {
-    set(Arrays.spliceToList(value, start, deleteCount, removed, items));
+  public SELF spliceTo(Collection<ELEMENT> removed, int start, int deleteCount, ELEMENT... items) {
+    set(Splice.spliceTo(value, start, deleteCount, removed, items));
     return myself;
   }
 

@@ -98,7 +98,7 @@ public class Lists {
     if (iterable instanceof Collection<E> c) {
       target.addAll(c);
     }
-    else {
+    else if (iterable!=null) {
       iterable.forEach(target::add);
     }
     return target;
@@ -121,7 +121,7 @@ public class Lists {
     if (list==null)
       return element;
 
-    if (isListIndexValid(index, list))
+    if (!isListIndexValid(list, index))
       return element;
 
     return list.set(index, element);
@@ -131,17 +131,10 @@ public class Lists {
     if (list==null)
       return null;
 
-    if (isListIndexValid(index, list))
+    if (!isListIndexValid(list, index))
       return null;
 
     return list.get(index);
-  }
-
-  private static boolean isListIndexValid(int index, List<?> list) {
-    if (list==null)
-      return false;
-
-    return index >= 0 && list.size() > index;
   }
 
 
@@ -152,7 +145,7 @@ public class Lists {
     if (index<0)
       index = list.size() + index;
 
-    if (!isListIndexValid(index, list)) {
+    if (!isListIndexValid(list, index)) {
       return null;
     }
 
@@ -170,7 +163,7 @@ public class Lists {
     if (list==null)
       return false;
 
-    if (!isListIndexValid(index, list))
+    if (!isListIndexValid(list, index))
       return false;
 
     return Comparison.areEqual(list.get(index), element);
@@ -180,7 +173,7 @@ public class Lists {
     if (list==null)
       return true;
 
-    if (!isListIndexValid(index, list))
+    if (!isListIndexValid(list, index))
       return true;
 
     return !Comparison.areEqual(list.get(index), element);
@@ -190,7 +183,7 @@ public class Lists {
     if (list==null)
       return;
 
-    if (!isListIndexValid(index, list))
+    if (!isListIndexValid(list, index))
       return;
 
     list.remove(index);
@@ -201,17 +194,17 @@ public class Lists {
       return null;
 
     List<E> clone = createClone(value);
-    if (value.getClass().getName().contains("Immutable")) {
+    if (Unmodifiables.isUnmodifiableCollection(value)) {
       return java.util.Collections.unmodifiableList(value);
     }
     return clone;
   }
 
-  private static <E> List<E> createClone(List<E> value) {
-    if (value instanceof LinkedList)
-      return new LinkedList<>(value);
+  private static <E> List<E> createClone(List<E> list) {
+    if (list instanceof LinkedList)
+      return new LinkedList<>(list);
 
-    return newList(value);
+    return newList(list);
   }
 
   public static <T> List<T> newListOrNull(T[] array) {
@@ -242,7 +235,56 @@ public class Lists {
     list.add(element);
     return list;
   }
-  private static <E> boolean isEmpty(List<E> list) {
+  public static boolean isEmpty(List<?> list) {
     return list==null || list.isEmpty();
+  }
+
+  public static int size(List<?> list) {
+    return list==null ? 0 : list.size();
+  }
+
+  public static <E> List<E> subList(List<E> list, int startIndexInclusive, int endIndexExclusive) {
+    return subList(list, startIndexInclusive, endIndexExclusive, true);
+  }
+
+  public static <E> List<E> subList(List<E> list, int startIndexInclusive, int endIndexExclusive, boolean asView) {
+    if (list==null)
+      return null;
+
+    if (startIndexInclusive<0)
+      startIndexInclusive = 0;
+
+    if (endIndexExclusive>list.size()) {
+      endIndexExclusive = list.size();
+    }
+
+    int newSize = endIndexExclusive - startIndexInclusive;
+    if (newSize<=0)
+      return asView ? Collections.emptyList() : new LinkedList<>();
+
+    List<E> subList = list.subList(startIndexInclusive, endIndexExclusive);
+    return asView ? subList : Lists.newList(subList);
+  }
+
+  public static <E> void push(List<E> list, List<E> items) {
+    if (isEmpty(list))
+      return;
+
+    Lists.addAll(list, items);
+  }
+
+  public static boolean isListIndexValid(List<?> value, int index) {
+    return index >= 0 && size(value) > index;
+  }
+
+  public static String toString(List<?> list) {
+    return list!=null ? list.toString() : null;
+  }
+
+  public static <T> void listcopy(List<? extends T> src, int srcPos, List<? super T> dest, int destPos, int length) {
+    if (src==null || dest==null)
+      return;
+
+    dest.addAll(destPos, src.subList(srcPos, srcPos + length));
   }
 }

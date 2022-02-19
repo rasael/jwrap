@@ -80,4 +80,11 @@ public class Collections {
 
     return value.toArray(generator);
   }
+
+  public static <T> List<T> unmodifiableList(List<? extends T> list) {
+    if (list==null)
+      return emptyList();
+
+    return java.util.Collections.unmodifiableList(list);
+  }
 }

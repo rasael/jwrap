@@ -232,7 +232,7 @@ public class Arrays {
     return removeImpl(array, startIndexInclusive, endIndexExclusive, null);
   }
 
-  private static <E> E[] removeImpl(E[] array, int startIndexInclusive, int endIndexExclusive, E[] insert) {
+  static <E> E[] removeImpl(E[] array, int startIndexInclusive, int endIndexExclusive, E[] insert) {
     if (array==null || isEmpty(array))
       return array;
 
@@ -253,9 +253,6 @@ public class Arrays {
     var elementsAfterEnd = array.length - endIndexExclusive;
     var insertsCount = size(insert);
     var elementsToCopy = elementsBeforeStart + elementsAfterEnd + insertsCount;
-    /*if (elementsToCopy==array.length) {
-      return array; // no change
-    }*/
 
     var result = newArrayLike(array, elementsToCopy);
 
@@ -310,145 +307,11 @@ public class Arrays {
     return list.toArray(i -> newArrayLike(array, i));
   }
 
-  // -------------------------------------------------------------------------------------------------------------------
-  // Splice
-  // -------------------------------------------------------------------------------------------------------------------
-
-  @Contract("null, _ -> null")
-  public static <E> E[] splice(E[] array, int start) {
-    if (array==null)
-      return null;
-
-    E[][] spliced = spliceAndGet(array, start, false);
-    return spliced!=null ? spliced[SPLICE_RESULT_ARRAY] : null;
-  }
-  @Contract("null, _ -> null")
-  public static <E> E[] spliceToList(E[] array, int start, List<E> removed) {
-    if (array==null)
-      return null;
-
-    E[][] spliced = spliceAndGet(array, start, true);
-    if (spliced==null)
-      return null;
-
-    Lists.addAll(removed, spliced[SPLICE_RESULT_REMOVED]);
-    return spliced[SPLICE_RESULT_ARRAY];
-  }
-
-  @Contract("null, _, _-> null")
-  public static <E> E[][] spliceAndGet(E[] array, int start, boolean returnRemoved) {
-    int size = size(array);
-    if (size==0)
-      return spliceResult(array);
-
-    start = toSpliceStart(start, size);
-
-    E[] removed = null;
-    if (returnRemoved)
-      removed = ArrayUtils.subarray(array, start, size(array));
-
-    return spliceResult(ArrayUtils.subarray(array, 0, start), removed);
-  }
-
-  @SafeVarargs
-  public static <E> E[] splice(E[] array, int start, int deleteCount, E... items) {
-    if (array==null)
-      return null;
-
-    E[][] spliced = spliceAndGet(array, start, deleteCount,false, items);
-    return spliced!=null ? spliced[SPLICE_RESULT_ARRAY] : null;
-  }
-
-  @SafeVarargs
-  public static <E> E[] spliceToList(E[] array, int start, int deleteCount, List<E> removed, E... items) {
-    if (array==null)
-      return null;
-
-    E[][] spliced = spliceAndGet(array, start, deleteCount,true, items);
-    if (spliced==null)
-      return null;
-
-    Lists.addAll(removed, spliced[SPLICE_RESULT_REMOVED]);
-    return spliced[SPLICE_RESULT_ARRAY];
-  }
-
-  public static final int SPLICE_RESULT_ARRAY = 0;
-  public static final int SPLICE_RESULT_REMOVED = 1;
-
-  private static <E> E[] cloneOrClear(E[] array, E[] toClone) {
-    return !isEmpty(toClone) ? clone(toClone) : clear(array);
-  }
-  @SafeVarargs
-  public static <E> E[][] spliceAndGet(E[] array, int start, int deleteCount, boolean returnRemoved, E... items) {
-    int size = size(array);
-    if (size==0)
-      return spliceResult(cloneOrClear(array, items));
-
-    // If deleteCount is 0 or negative, no elements are removed.
-    if (deleteCount <= 0 && size(items)==0)
-      return spliceResult(array);
-
-    start = toSpliceStart(start, size);
-
-    // If 0..deleteCount is the entire array, return items or an empty array
-    if (start==0 && deleteCount > size) {
-      E[] result = cloneOrClear(array, items);
-      if (!returnRemoved) {
-        return spliceResult(result);
-      }
-      return spliceResult(result, array);
-    }
-
-    // If deleteCount is equal to or larger than array.length - start
-    // then all the elements from start to the end of the array will be deleted.
-    E[] removed = null;
-    if (deleteCount >= (size - start)) {
-
-      if (returnRemoved) {
-        // compute the splice subarray only if required as result
-        removed = subarray(array, start, size(array));
-      }
-
-      array = subarray(array, 0, start);
-      return spliceResult(push(array, items), removed);
-    }
-
-    if (returnRemoved) {
-      removed = subarray(array, start, start + deleteCount);
-    }
-    return spliceResult(removeImpl(array, start, start + deleteCount, items), removed);
-  }
-
-  @SafeVarargs
-  private static <E> E[][] spliceResult(E[] array, E...spliced) {
-    if (array==null)
-      return null;
-
-    @SuppressWarnings("unchecked") // justified because of type E[]
-    E[][] result = (E[][]) Array.newInstance(array.getClass(), 2);
-    result[SPLICE_RESULT_ARRAY] = array;
-    if (!isEmpty(spliced)) {
-      result[SPLICE_RESULT_REMOVED] = spliced;
-    }
-    return result;
-  }
-
   public static <E> E[] clone(E[] array) {
     if (array==null)
       return null;
 
     return array.clone();
-  }
-
-  private static int toSpliceStart(int start, int size) {
-    if (start < 0)
-      start = size + start;
-
-    return Math.min(size, start);
-  }
-
-  public static <E> E[] splice(E[] value) {
-    return clone(value);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -478,5 +341,22 @@ public class Arrays {
       return clone(items);
 
     return ArrayUtils.addAll(array, items);
+  }
+
+  @SafeVarargs
+  public static <E> List<E> asListOrNull(E...values) {
+    if (values==null)
+      return null;
+
+    return asList(values);
+  }
+
+  public static String toString(Object array) {
+    return ArrayUtils.toString(array);
+  }
+
+  @SafeVarargs
+  public static <E> List<E> toList(E...elements) {
+    return Lists.newList(asList(elements));
   }
 }
