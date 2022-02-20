@@ -23,7 +23,9 @@ import javax.annotation.ParametersAreNullableByDefault;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Spliterator;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
@@ -32,12 +34,14 @@ public class Iterables {
 
   private static final Iterable<?> NULL_SINGLETON_ITERABLE = Collections.singleton(null);
 
+  private static final Iterable<?> EMPTY = new EmptyIterable();
+
   private Iterables(){}
 
   // -------------------------------------------------------------------------------------------------------------------
 
   public static <T> Iterable<T> empty() {
-    return Collections.emptySet();
+    return (Iterable<T>) EMPTY;
   }
 
   @SuppressWarnings("unchecked")
@@ -144,17 +148,18 @@ public class Iterables {
     return !iterable.iterator().hasNext();
   }
 
+  /**
+   * <p>Returns true if all elements of the sequence are contained in the given iterable</p>
+   * <p>Returns false if the {@code iterable} is null</p>
+   * <p>Returns true if the {@code sequence} is null or empty</p>
+   * @param iterable the iterable to search into
+   * @param sequence the sequence of values to search for in the iterable
+   * @param <E> the type of elements contained in the iterable
+   * @return true if all elements of the sequence are present in the given iterable
+   */
   public static <E> boolean contains(Iterable<E> iterable, Iterable<E> sequence) {
     if (iterable==null)
-      return sequence==null;
-
-    if (sequence==null)
       return false;
-
-    if (isEmpty(sequence)) {
-      return false;
-    }
-
 
     return Streams.stream(sequence).allMatch(value -> contains(iterable, value));
   }
@@ -170,6 +175,16 @@ public class Iterables {
     return Lists.newList(iterable).toArray(generator);
   }
 
+  /**
+   * <p>Returns a new iterable that mimics the given iterable iterator and spliterator.</p>
+   *
+   * <p>This allows to proxy an Iterable interface and retain the characteristics of its Spliterator.</p>
+   *
+   * <p>If the {@code iterable} is null, this method returns {@link #empty()}</p>
+   * @param iterable the iterable to mimic, can be null
+   * @param <T> the type of elements contained by the iterable
+   * @return a new iterable that mimics the given iterable
+   */
   public static <T> Iterable<T> like(Iterable<T> iterable) {
     if (iterable==null)
       return empty();
@@ -186,5 +201,33 @@ public class Iterables {
         return iterable.spliterator();
       }
     };
+  }
+
+  public static <T> Iterable<T> orEmpty(Iterable<T> iterable) {
+    if (iterable==null)
+      return empty();
+
+    return iterable;
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  private static class EmptyIterable<T> implements Iterable<T> {
+
+    @NotNull
+    @Override
+    public Iterator<T> iterator() {
+      return Iterators.empty();
+    }
+
+    @Override
+    public Spliterator<T> spliterator() {
+      return Spliterators.empty();
+    }
+
+    @Override
+    public void forEach(Consumer<? super T> action) {
+      Objects.requireNonNull(action);
+    }
   }
 }

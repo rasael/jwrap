@@ -109,4 +109,72 @@ class SpliceTest {
     return new String[]{"a", "b", "c"};
   }
 
+  private static final List<String> NULL_LIST = null;
+  private static final List<String> EMPTY_LIST = java.util.Arrays.asList();
+  @Test
+  void testSpliceList() {
+    // Splicing null results in a new empty list
+    assertThat(Splice.splice(NULL_LIST))
+        .isNotNull()
+        .isEmpty();
+
+    // Splicing empty list results in a new empty list
+    assertThat(Splice.splice(EMPTY_LIST))
+        .isNotNull()
+        .isNotSameAs(EMPTY_LIST)
+        .isEmpty();
+
+    var list = Lists.newList("a","b","c","d");
+    var result = Splice.splice(list);
+
+    assertThat(result)
+        .hasSize(4)
+        .containsExactlyElementsOf(list);
+  }
+
+  @Test
+  void testSpliceListWithStart() {
+    // Splicing null results in a new empty list
+    assertThat(Splice.splice(NULL_LIST, 0).result()).isNull();
+    assertThat(Splice.splice(NULL_LIST, 0).removed()).isEmpty();
+
+    assertThat(Splice.splice(EMPTY_LIST, 0).result()).isEmpty();
+    assertThat(Splice.splice(EMPTY_LIST, 0).removed()).isEmpty();
+
+    var list = Lists.newList("a","b","c","d");
+    var spliced = Splice.splice(list, 1);
+    assertThat(spliced.result())
+        .containsExactly("a")
+        .isNotSameAs(list);
+
+    assertThat(spliced.removed())
+        .containsExactly("b","c","d");
+  }
+
+  @Test
+  void testSpliceListWithNegativeStart() {
+    // Splicing null results in a new empty list
+    assertThat(Splice.splice(NULL_LIST, -1).result()).isNull();
+    assertThat(Splice.splice(NULL_LIST, -1).removed()).isEmpty();
+
+    assertThat(Splice.splice(EMPTY_LIST, -1).result()).isEmpty();
+    assertThat(Splice.splice(EMPTY_LIST, -1).removed()).isEmpty();
+
+    var list = Lists.newList("a","b","c","d");
+    var spliced = Splice.splice(list, -1);
+    assertThat(spliced.result()).containsExactly("a","b","c").isNotSameAs(list);
+    assertThat(spliced.removed()).containsExactly("d");
+  }
+
+  @Test
+  void spliceTo() {
+  }
+
+  @Test
+  void testSplice2() {
+  }
+
+  @Test
+  void testSplice3() {
+  }
 }

@@ -141,4 +141,8 @@ public abstract class AbstractStreamWrap<ELEMENT, SELF extends AbstractStreamWra
   public <U extends Comparable<? super U>> SELF sortReversedBy(Function<? super ELEMENT, ? extends U> keyExtractor) {
     return set(Streams.sortReversedBy(value, keyExtractor));
   }
+
+  public SELF limit(int limit) {
+    return set(Streams.limit(value, limit));
+  }
 }

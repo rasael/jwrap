@@ -174,19 +174,21 @@ public class Splice {
   // -------------------------------------------------------------------------------------------------------------------
 
   @ThreadSafe
-  private abstract static interface Splicer<A> {
+  private interface Splicer<A> {
 
-    abstract A remove(A value, int startIndexInclusive, int endIndexExclusive, A items);
+    A remove(A value, int startIndexInclusive, int endIndexExclusive, A items);
 
-    abstract A cloneOrClear(A value, A items);
+    A cloneOrClear(A value, A items);
 
-    abstract A clone(A value);
+    A clone(A value);
 
-    abstract int size(A value);
+    int size(A value);
 
-    abstract A subset(A value, int startIndexInclusive, int endIndexExclusive);
+    A empty(A value);
 
-    abstract A push(A value, A items);
+    A subset(A value, int startIndexInclusive, int endIndexExclusive);
+
+    A push(A value, A items);
 
     // -------------------------------------------------------------------------------------------------------------------
 
@@ -204,7 +206,7 @@ public class Splice {
     default Spliced<A> splice(A value, int start, boolean returnRemoved) {
       int size = size(value);
       if (size==0)
-        return Spliced.of(value, null);
+        return Spliced.of(value, empty(value));
 
       start = toSpliceStart(start, size);
 
@@ -218,11 +220,11 @@ public class Splice {
     default Spliced<A> splice(A value, int start, int deleteCount, boolean returnRemoved, A items) {
       int size = size(value);
       if (size==0)
-        return Spliced.of(cloneOrClear(value, items), null);
+        return Spliced.of(cloneOrClear(value, items), empty(value));
 
       // If deleteCount is 0 or negative, no elements are removed.
       if (deleteCount <= 0 && size(items)==0)
-        return Spliced.of(value, null);
+        return Spliced.of(value, empty(value));
 
       start = Splice.toSpliceStart(start, size);
 
@@ -230,7 +232,7 @@ public class Splice {
       if (start==0 && deleteCount > size) {
         A result = cloneOrClear(value, items);
         if (!returnRemoved) {
-          return Spliced.of(result, null);
+          return Spliced.of(result, empty(value));
         }
         return Spliced.of(result, value);
       }
@@ -252,6 +254,9 @@ public class Splice {
       if (returnRemoved) {
         removed = subset(value, start, start + deleteCount);
       }
+
+      if (removed==null)
+        removed = empty(value);
 
       return Spliced.of(remove(value, start, start + deleteCount, items), removed);
     }
@@ -286,7 +291,7 @@ public class Splice {
 
     @Override
     public List<E> clone(List<E> value) {
-      return Lists.clone(value);
+      return value!=null ? Lists.clone(value) : Lists.newList();
     }
 
     @Override
@@ -307,6 +312,11 @@ public class Splice {
     @Override
     public int size(List<E> value) {
       return Lists.size(value);
+    }
+
+    @Override
+    public List<E> empty(List<E> value) {
+      return Lists.newList();
     }
 
     @Override
@@ -384,6 +394,11 @@ public class Splice {
     @Override
     public int size(E[] value) {
       return Arrays.size(value);
+    }
+
+    @Override
+    public E[] empty(E[] value) {
+      return Arrays.newArrayLike(value);
     }
 
     @Override

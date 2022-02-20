@@ -359,4 +359,9 @@ public class Arrays {
   public static <E> List<E> toList(E...elements) {
     return Lists.newList(asList(elements));
   }
+
+  @SafeVarargs
+  public static <E> Iterable<E> toSet(E...elements) {
+    return Sets.newOrderedSet(asList(elements));
+  }
 }

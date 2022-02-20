@@ -19,6 +19,7 @@ package net.bervini.rasael.jwrap.api;
 import net.bervini.rasael.jwrap.util.Streams;
 
 import javax.annotation.ParametersAreNullableByDefault;
+import java.util.Iterator;
 import java.util.function.Supplier;
 
 import static net.bervini.rasael.jwrap.api.JWrap.Wrap;
@@ -41,5 +42,13 @@ public abstract class AbstractSupplierWrap<T, SELF extends AbstractSupplierWrap<
 
   public StreamWrap<T> stream(int size) {
     return Wrap(Streams.generate(value, size));
+  }
+
+  public Iterator<T> iterator(int size) {
+    return stream(size).iterator();
+  }
+
+  public Iterator<T> infiniteIterator(){
+    return infiniteStream().iterator();
   }
 }

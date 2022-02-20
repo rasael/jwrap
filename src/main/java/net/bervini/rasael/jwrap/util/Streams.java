@@ -161,4 +161,11 @@ public class Streams {
   public static <T> Stream<T> generate(Supplier<T> supplier, int size) {
     return StreamSupport.stream(Spliterators.generate(supplier, size), false);
   }
+
+  public static <T> Stream<T> limit(Stream<T> stream, int limit) {
+    if (stream==null || limit<=0)
+      return empty();
+
+    return stream.limit(limit);
+  }
 }
