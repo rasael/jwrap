@@ -26,7 +26,8 @@
     <version>0.1-SNAPSHOT</version>
 
     <name>JWrap</name>
-    <url>https://github.com/rasael/jwrap</url>
+    <description>JWrap convenience object wrapper</description>
+    <url>https://rasael.github.io/jwrap/</url>
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
