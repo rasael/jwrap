@@ -17,10 +17,15 @@
 package net.bervini.rasael.jwrap.api;
 
 
+import net.bervini.rasael.jwrap.util.Preconditions;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.function.Predicate;
@@ -122,6 +127,11 @@ public class JWrap {
     return new StreamWrap<>(val);
   }
 
+  @Nonnull
+  public static LocalDateWrap $(LocalDate val) {
+    return new LocalDateWrap(val);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   @Nonnull
   public static <T> ObjectArrayWrap<T> Wrap(T[] val) {
@@ -191,6 +201,24 @@ public class JWrap {
   @Nonnull
   public static <T> StreamWrap<T> Wrap(Stream<T> val) {
     return new StreamWrap<>(val);
+  }
+
+  @Nonnull
+  public static LocalDateWrap Wrap(LocalDate val) {
+    return new LocalDateWrap(val);
+  }
+
+  // -------------------------------------------------------------------------------------------------------------------
+
+  public static TemporalUnitOffset within(Duration duration) {
+    Preconditions.requireArgNonNull(duration);
+    return new TemporalUnitWithinOffset(duration.toNanos(), ChronoUnit.NANOS);
+  }
+
+  public static TemporalUnitOffset within(long value, TemporalUnit unit) {
+    Preconditions.checkArgument(value>=0, "Argument must be positive, provided <%d>", value);
+    Preconditions.requireArgNonNull(unit);
+    return new TemporalUnitWithinOffset(value, unit);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
