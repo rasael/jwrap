@@ -142,6 +142,10 @@ public class JWrap {
   public static <T> ObjectArrayWrap<T> Wrap(T[] val) {
     return new ObjectArrayWrap<>(val);
   }
+  @Nonnull
+  public static <T> ObjectArrayWrap<T> Wrap(AtomicReferenceArray<T> val) {
+    return new ObjectArrayWrap<>(val);
+  }
 
   @Nonnull
   public static <T> ListWrap<T> Wrap(List<T> val) {

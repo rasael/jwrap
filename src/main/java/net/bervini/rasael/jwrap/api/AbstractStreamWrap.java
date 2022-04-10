@@ -38,8 +38,6 @@ import static net.bervini.rasael.jwrap.api.JWrap.Wrap;
 public abstract class AbstractStreamWrap<ELEMENT, SELF extends AbstractStreamWrap<ELEMENT, SELF>>
     extends AbstractWrap<Stream<ELEMENT>, SELF> implements IterableWrap<ELEMENT>, StreamableWrap<ELEMENT>/*, /*Stream<ELEMENT>*/ {
 
-  private boolean avoidsOptimizations;
-
   protected AbstractStreamWrap(@Nullable Stream<ELEMENT> value) {
     super(value!=null ? value : Stream.empty());
   }
@@ -91,27 +89,21 @@ public abstract class AbstractStreamWrap<ELEMENT, SELF extends AbstractStreamWra
    */
   @Beta
   public SELF avoidOptimizations() {
-    if (!avoidsOptimizations) {
-      // with a .filter() call we block any optimization on characteristic DISTINCT (eg. count())
-      set(Streams.filter(value, Predicates.acceptAll()));
-
-      // with a .map() call we block any optimization on characteristic SORTED
-      set(Streams.map(value, Function.identity()));
-      avoidsOptimizations = true;
-    }
-    return myself;
+               // with a .filter() call we block any optimization on characteristic DISTINCT (eg. count())
+    return this.set(Streams.filter(value, Predicates.acceptAll()))
+               // with a .map() call we block any optimization on characteristic SORTED
+               .set(Streams.map(value, Function.identity()));
   }
 
   public SELF onEach(Consumer<? super ELEMENT> action) {
     if (value==null || action==null)
       return myself;
 
-    set(Streams.filter(value, Predicates.acceptAll()));
-    set(Streams.map(value, e -> {
-      action.accept(e);
-      return e;
-    }));
-    return myself;
+    return this.set(Streams.filter(value, Predicates.acceptAll()))
+               .set(Streams.map(value, e -> {
+                 action.accept(e);
+                 return e;
+               }));
   }
 
   // -------------------------------------------------------------------------------------------------------------------

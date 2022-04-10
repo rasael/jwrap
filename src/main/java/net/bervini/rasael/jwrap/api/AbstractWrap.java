@@ -87,9 +87,19 @@ public abstract class AbstractWrap<T, SELF extends AbstractWrap<T, SELF>> implem
    */
   @Beta
   public SELF set(@Nullable T value) {
+    // Note: if we don't chang this.value, then we could allow for constants wrap instances, which is useful of constant
+    // instances like nulls or unmodifiable empty collections.
+    // However, this means that every method may or may not return a new instance, which does not represent a clear API.
+    // example:
+    // var l = $(list).add("something");
+    // System.out.println(l.add(" else").toString());
+    //
+    // intuitively, this should print 'something else'. Then add() must return the same instance, not a new one.
     this.value = value;
     return myself;
+//    return replicator().apply(value);
   }
+
 /*
   SELF with(T value) {
     return replicator().apply(value);
@@ -197,8 +207,7 @@ public abstract class AbstractWrap<T, SELF extends AbstractWrap<T, SELF>> implem
   public SELF fromJson(Class<T> aClass, String json) {
     Preconditions.requireArgNonNull(aClass);
 
-    set(gson.fromJson(json, aClass));
-    return myself;
+    return set(gson.fromJson(json, aClass));
   }
 
   @Beta

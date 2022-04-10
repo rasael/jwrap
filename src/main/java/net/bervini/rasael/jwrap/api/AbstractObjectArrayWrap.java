@@ -71,14 +71,12 @@ public abstract class AbstractObjectArrayWrap<
   }
 
   public SELF filter(Predicate<? super ELEMENT> predicate) {
-    set(Arrays.filter(value, predicate));
-    return myself;
+    return set(Arrays.filter(value, predicate));
   }
 
   @Override
   public SELF removeIf(Predicate<? super ELEMENT> predicate) {
-    set(Arrays.filter(value, Predicates.not(predicate)));
-    return myself;
+    return set(Arrays.filter(value, Predicates.not(predicate)));
   }
 
   @Override
@@ -105,8 +103,7 @@ public abstract class AbstractObjectArrayWrap<
   @Override
   @Tested
   public SELF unshift(ELEMENT element) {
-    set(Arrays.insert(0, value, element));
-    return myself;
+    return set(Arrays.insert(0, value, element));
   }
 
   @Override
@@ -116,8 +113,7 @@ public abstract class AbstractObjectArrayWrap<
 
   @Tested
   public SELF splice() {
-    set(Splice.splice(value));
-    return myself;
+    return set(Splice.splice(value));
   }
 
   /**
@@ -132,8 +128,7 @@ public abstract class AbstractObjectArrayWrap<
    * @return
    */
   public SELF splice(int start) {
-    set(Splice.splice(value, start).result());
-    return myself;
+    return set(Splice.splice(value, start).result());
   }
 
   /**
@@ -157,18 +152,15 @@ public abstract class AbstractObjectArrayWrap<
    * @return
    */
   public SELF splice(int start, int deleteCount, ELEMENT... items) {
-    set(Splice.splice(value, start, deleteCount, items).result());
-    return myself;
+    return set(Splice.splice(value, start, deleteCount, items).result());
   }
 
   public SELF spliceTo(Collection<ELEMENT> removed, int start) {
-    set(Splice.spliceTo(value, start, removed));
-    return myself;
+    return set(Splice.spliceTo(value, start, removed));
   }
 
   public SELF spliceTo(Collection<ELEMENT> removed, int start, int deleteCount, ELEMENT... items) {
-    set(Splice.spliceTo(value, start, deleteCount, removed, items));
-    return myself;
+    return set(Splice.spliceTo(value, start, deleteCount, removed, items));
   }
 
   @Nullable
@@ -204,8 +196,7 @@ public abstract class AbstractObjectArrayWrap<
 
   @SafeVarargs
   public final SELF concat(ELEMENT[]... items) {
-    set(Arrays.concat(value, items));
-    return myself;
+    return set(Arrays.concat(value, items));
   }
 
   public final Iterable<Map.Entry<Integer, ELEMENT>> entries() {
