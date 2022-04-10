@@ -21,6 +21,7 @@ import net.bervini.rasael.jwrap.util.Preconditions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNullableByDefault;
+import java.io.File;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -131,6 +132,10 @@ public class JWrap {
   public static LocalDateWrap $(LocalDate val) {
     return new LocalDateWrap(val);
   }
+  @Nonnull
+  public static FileWrap $(File val) {
+    return new FileWrap(val);
+  }
 
   // -------------------------------------------------------------------------------------------------------------------
   @Nonnull
@@ -206,6 +211,11 @@ public class JWrap {
   @Nonnull
   public static LocalDateWrap Wrap(LocalDate val) {
     return new LocalDateWrap(val);
+  }
+
+  @Nonnull
+  public static FileWrap Wrap(File val) {
+    return new FileWrap(val);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
