@@ -16,31 +16,10 @@
 
 package net.bervini.rasael.jwrap.api;
 
-import net.bervini.rasael.jwrap.util.Files;
+public interface ObjectIterableWrap<
+    ACTUAL extends Iterable<ELEMENT>,
+    ELEMENT,
+    SELF extends ObjectIterableWrap<ACTUAL, ELEMENT, SELF>>
+    extends ObjectEnumerableWrap<ELEMENT, SELF>, Iterable<ELEMENT> {
 
-import java.io.File;
-
-public class FileWrap extends AbstractFileWrap<FileWrap> {
-
-  public FileWrap(File file) {
-    super(file);
-  }
-
-  @Override
-  FileWrap self() {
-    return this;
-  }
-
-  @Override
-  Replicator<File, FileWrap> replicator() {
-    return FileWrap::new;
-  }
-
-  public DirectoryWrap asDirectory() {
-    return new DirectoryWrap(value!=null && value.isDirectory() ? value : null);
-  }
-
-  public boolean touch() {
-    return Files.touch(value);
-  }
 }

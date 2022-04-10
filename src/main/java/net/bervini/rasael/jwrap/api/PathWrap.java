@@ -20,39 +20,24 @@ import net.bervini.rasael.jwrap.util.Iterables;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNullableByDefault;
+import java.nio.file.Path;
 import java.util.Iterator;
 
-@ParametersAreNullableByDefault
-public abstract class AbstractIterableWrap<
-    ACTUAL extends Iterable<ELEMENT>,
-    ELEMENT,
-    SELF extends AbstractIterableWrap<ACTUAL, ELEMENT, SELF>>
-  extends AbstractWrap<ACTUAL, SELF> implements ObjectIterableWrap<ACTUAL, ELEMENT, SELF> {
+public class PathWrap extends AbstractComparableWrap<Path, PathWrap>
+    implements ObjectIterableWrap<Path, Path, PathWrap> {
 
-  protected AbstractIterableWrap(ACTUAL value) {
-    super(value);
-  }
-
-  @NotNull
-  @Override
-  public Iterator<ELEMENT> iterator() {
-    return Iterables.iterator(value);
+  public PathWrap(Path path) {
+    super(path);
   }
 
   @Override
-  public boolean isNullOrEmpty() {
-    return Iterables.isNullOrEmpty(value);
+  PathWrap self() {
+    return this;
   }
 
   @Override
-  public boolean isEmpty() {
-    return Iterables.isEmpty(value);
-  }
-
-  @Override
-  public boolean contains(@Nullable Iterable<ELEMENT> iterable) {
-    return Iterables.contains(value, iterable);
+  Replicator<Path, PathWrap> replicator() {
+    return PathWrap::new;
   }
 
   @Override
@@ -60,4 +45,14 @@ public abstract class AbstractIterableWrap<
     return Iterables.size(value);
   }
 
+  @Override
+  public boolean contains(@Nullable Iterable<Path> iterable) {
+    return Iterables.contains(value, iterable);
+  }
+
+  @NotNull
+  @Override
+  public Iterator<Path> iterator() {
+    return Iterables.iterator(value);
+  }
 }

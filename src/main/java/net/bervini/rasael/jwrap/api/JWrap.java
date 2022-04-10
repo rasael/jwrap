@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.io.File;
 import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -132,9 +133,15 @@ public class JWrap {
   public static LocalDateWrap $(LocalDate val) {
     return new LocalDateWrap(val);
   }
+
   @Nonnull
   public static FileWrap $(File val) {
     return new FileWrap(val);
+  }
+
+  @Nonnull
+  public static PathWrap $(Path val) {
+    return new PathWrap(val);
   }
 
   // -------------------------------------------------------------------------------------------------------------------
@@ -220,6 +227,11 @@ public class JWrap {
   @Nonnull
   public static FileWrap Wrap(File val) {
     return new FileWrap(val);
+  }
+
+  @Nonnull
+  public static PathWrap Wrap(Path val) {
+    return new PathWrap(val);
   }
 
   // -------------------------------------------------------------------------------------------------------------------

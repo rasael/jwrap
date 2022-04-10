@@ -39,4 +39,14 @@ public class DirectoryWrap extends AbstractFileWrap<DirectoryWrap> {
   public boolean isEmpty() {
     return Files.isEmptyDirectory(value);
   }
+
+  public boolean ensure() {
+    if (value==null)
+      return false;
+
+    if (!exists())
+      return value.mkdirs();
+
+    return true;
+  }
 }

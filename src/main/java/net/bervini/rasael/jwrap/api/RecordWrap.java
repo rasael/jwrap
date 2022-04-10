@@ -16,31 +16,19 @@
 
 package net.bervini.rasael.jwrap.api;
 
-import net.bervini.rasael.jwrap.util.Files;
+public class RecordWrap extends AbstractWrap<Record, RecordWrap> {
 
-import java.io.File;
-
-public class FileWrap extends AbstractFileWrap<FileWrap> {
-
-  public FileWrap(File file) {
-    super(file);
+  public RecordWrap(Record record) {
+    super(record);
   }
 
   @Override
-  FileWrap self() {
+  RecordWrap self() {
     return this;
   }
 
   @Override
-  Replicator<File, FileWrap> replicator() {
-    return FileWrap::new;
-  }
-
-  public DirectoryWrap asDirectory() {
-    return new DirectoryWrap(value!=null && value.isDirectory() ? value : null);
-  }
-
-  public boolean touch() {
-    return Files.touch(value);
+  Replicator<Record, RecordWrap> replicator() {
+    return RecordWrap::new;
   }
 }

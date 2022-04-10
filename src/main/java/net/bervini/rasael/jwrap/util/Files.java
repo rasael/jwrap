@@ -17,6 +17,8 @@
 package net.bervini.rasael.jwrap.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class Files {
@@ -34,8 +36,7 @@ public class Files {
     if (file==null || file.isFile())
       return false;
 
-    var files = Objects.requireNonNull(file.listFiles(File::isFile));
-    if (files.length>0)
+    if (!Arrays.isEmpty(file.listFiles(File::isFile)))
       return true;
 
     if (recursive) {
@@ -60,5 +61,27 @@ public class Files {
 
   public static boolean isEmptyFile(File value) {
     return exists(value) && value.isFile() && value.length()==0;
+  }
+
+  public static boolean touch(File file) {
+    if (file==null)
+      return false;
+
+    if (file.exists())
+      return true;
+
+    if (!file.canWrite())
+      return false;
+
+    try {
+      return file.createNewFile();
+    }
+    catch (IOException e) {
+      return false;
+    }
+  }
+
+  public static Path toPath(File file) {
+    return file!=null ? file.toPath() : null;
   }
 }

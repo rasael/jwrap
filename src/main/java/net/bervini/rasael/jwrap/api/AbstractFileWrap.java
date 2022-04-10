@@ -19,6 +19,7 @@ package net.bervini.rasael.jwrap.api;
 import net.bervini.rasael.jwrap.util.Files;
 
 import java.io.File;
+import java.nio.file.Path;
 
 public abstract class AbstractFileWrap<SELF extends AbstractFileWrap<SELF>> extends AbstractComparableWrap<File, SELF> {
 
@@ -52,6 +53,14 @@ public abstract class AbstractFileWrap<SELF extends AbstractFileWrap<SELF>> exte
 
   public final boolean containsFiles(boolean recursive) {
     return Files.containsFiles(value, recursive);
+  }
+
+  public final Path toPath() {
+    return Files.toPath(value);
+  }
+
+  public final PathWrap asPath() {
+    return new PathWrap(Files.toPath(value));
   }
 }
 
