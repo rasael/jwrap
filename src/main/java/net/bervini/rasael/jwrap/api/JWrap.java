@@ -144,6 +144,10 @@ public class JWrap {
     return new PathWrap(val);
   }
 
+  public static <T> ObjectWrap<T> $(T val) {
+    return new ObjectWrap<>(val);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
   @Nonnull
   public static <T> ObjectArrayWrap<T> Wrap(T[] val) {
@@ -234,6 +238,9 @@ public class JWrap {
     return new PathWrap(val);
   }
 
+  public static <T> ObjectWrap<T> Wrap(T val) {
+    return new ObjectWrap<>(val);
+  }
   // -------------------------------------------------------------------------------------------------------------------
 
   public static TemporalUnitOffset within(Duration duration) {
