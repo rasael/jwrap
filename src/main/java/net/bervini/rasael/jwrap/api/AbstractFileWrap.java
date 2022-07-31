@@ -19,7 +19,10 @@ package net.bervini.rasael.jwrap.api;
 import net.bervini.rasael.jwrap.util.Files;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
+
+import static net.bervini.rasael.jwrap.api.JWrap.Wrap;
 
 public abstract class AbstractFileWrap<SELF extends AbstractFileWrap<SELF>> extends AbstractComparableWrap<File, SELF> {
 
@@ -53,6 +56,27 @@ public abstract class AbstractFileWrap<SELF extends AbstractFileWrap<SELF>> exte
 
   public final boolean containsFiles(boolean recursive) {
     return Files.containsFiles(value, recursive);
+  }
+
+  public final SELF absoluteFile() {
+    if (value==null)
+      return myself;
+
+    return set(value.getAbsoluteFile());
+  }
+
+  public final StringWrap absolutePath() {
+    if (value==null)
+      return Wrap((String) null);
+
+    return Wrap(value.getAbsolutePath());
+  }
+
+  public final SELF canonicalFile() throws IOException {
+    if (value==null)
+      return myself;
+
+    return set(value.getCanonicalFile());
   }
 
   public final Path toPath() {
