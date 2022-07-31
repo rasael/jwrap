@@ -52,6 +52,10 @@ public interface StreamableWrap<ELEMENT> {
     return pureStream().toList();
   }
 
+  default ListWrap<ELEMENT> toListWrap() {
+    return Wrap(pureStream().collect(Collectors.toList()));
+  }
+
   /**
    * Returns a new Set out of the current streamable wrap
    */
