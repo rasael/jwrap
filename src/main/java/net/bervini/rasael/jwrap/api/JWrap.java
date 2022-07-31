@@ -21,6 +21,9 @@ import net.bervini.rasael.jwrap.util.Preconditions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNullableByDefault;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.File;
 import java.math.BigDecimal;
 import java.nio.file.Path;
@@ -115,6 +118,9 @@ public class JWrap {
   }
 
   @Nonnull
+  public static <T> ClassWrap<T> $(Class<T> val) { return new ClassWrap<>(val);}
+
+  @Nonnull
   public static <T> PredicateWrap<T> $(Predicate<T> val) {
     return new PredicateWrap<>(val);
   }
@@ -148,7 +154,19 @@ public class JWrap {
     return new ObjectWrap<>(val);
   }
 
+  public static PointWrap $(Point val) {
+    return new PointWrap(val);
+  }
+
+  public static RectangleWrap $(Rectangle val) {
+    return new RectangleWrap(val);
+  }
+
+  public static ColorWrap $(Color val) {
+    return new ColorWrap(val);
+  }
   // -------------------------------------------------------------------------------------------------------------------
+
   @Nonnull
   public static <T> ObjectArrayWrap<T> Wrap(T[] val) {
     return new ObjectArrayWrap<>(val);
@@ -214,6 +232,9 @@ public class JWrap {
   }
 
   @Nonnull
+  public static <T> ClassWrap<T> Wrap(Class<T> val) { return new ClassWrap<>(val);}
+
+  @Nonnull
   public static <T> PredicateWrap<T> Wrap(Predicate<T> val) {
     return new PredicateWrap<>(val);
   }
@@ -240,6 +261,18 @@ public class JWrap {
 
   public static <T> ObjectWrap<T> Wrap(T val) {
     return new ObjectWrap<>(val);
+  }
+
+  public static PointWrap Wrap(Point val) {
+    return new PointWrap(val);
+  }
+
+  public static RectangleWrap Wrap(Rectangle val) {
+    return new RectangleWrap(val);
+  }
+
+  public static ColorWrap Wrap(Color val) {
+    return new ColorWrap(val);
   }
   // -------------------------------------------------------------------------------------------------------------------
 
