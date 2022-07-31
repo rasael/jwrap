@@ -37,10 +37,23 @@ public class PointWrap extends AbstractPoint2DWrap<Point, PointWrap> {
   }
 
   // -------------------------------------------------------------------------------------------------------------------
+  public Point translated(int dx, int dy) {
+    if (value==null)
+      return null;
+
+    return new Point(value.x + dx, value.y + dy);
+  }
+
+  public PointWrap copy() {
+    if (value==null)
+      return this;
+
+    return new PointWrap(value.getLocation());
+  }
 
   public PointWrap plus(Point point) {
     if (value==null)
-      return null;
+      return this;
 
     if (point!=null)
       value.setLocation(value.x+point.x, value.y+point.y);
@@ -50,7 +63,7 @@ public class PointWrap extends AbstractPoint2DWrap<Point, PointWrap> {
 
   public PointWrap minus(Point point) {
     if (value==null)
-      return null;
+      return this;
 
     if (point==null)
       return this;
