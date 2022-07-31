@@ -164,7 +164,7 @@ class StringWrapTest {
 
   @Test
   void toJson() {
-    assertThat($("rasael").json()).isEqualTo("\"rasael\"");
+    assertThat($("rasael").json().get()).isEqualTo("\"rasael\"");
   }
 
   @Test

@@ -144,7 +144,7 @@ class IntWrapTest {
 
   @Test
   void toJson() {
-    assertThat($(FOURTY_TWO).json()).isEqualTo("42");
+    assertThat($(FOURTY_TWO).json().get()).isEqualTo("42");
   }
 
   @Test

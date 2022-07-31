@@ -25,6 +25,10 @@ import net.bervini.rasael.jwrap.util.Strings;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNullableByDefault;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
 import java.util.stream.IntStream;
 
 import static net.bervini.rasael.jwrap.api.JWrap.Wrap;
@@ -165,5 +169,12 @@ public abstract class AbstractCharSequenceWrap<
   @Beta
   public boolean containsHtml5() {
     return CharSequences.containsHtml5Tags(value);
+  }
+
+  public SELF writeTo(Path path, OpenOption... options) throws IOException {
+    if (path!=null && value!=null) {
+      Files.writeString(path, value, options);
+    }
+    return self();
   }
 }

@@ -20,6 +20,9 @@ import net.bervini.rasael.jwrap.util.Strings;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
+import java.util.stream.Stream;
+
+import static net.bervini.rasael.jwrap.api.JWrap.Wrap;
 
 public abstract class AbstractStringWrap<SELF extends AbstractStringWrap<SELF>> extends AbstractCharSequenceWrap<String, SELF>
     implements Comparable<String> {
@@ -73,4 +76,31 @@ public abstract class AbstractStringWrap<SELF extends AbstractStringWrap<SELF>> 
   public SELF concat(CharSequence...sequences) {
     return set(Strings.concat(value, sequences));
   }
+
+  public StreamWrap<String> lines() {
+    return Wrap(value!=null ? value.lines() : Stream.empty());
+  }
+
+  public SELF removeEnding(String end) {
+    if (value==null || end==null)
+      return myself;
+
+    while(value.endsWith(end)) {
+      set(value.substring(0, value.length() - end.length()));
+    }
+
+    return myself;
+  }
+
+  public SELF removeEnd(String end) {
+    if (value==null || end==null)
+      return myself;
+
+    if (value.endsWith(end)) {
+      set(value.substring(0, value.length() - end.length()));
+    }
+
+    return myself;
+  }
+
 }

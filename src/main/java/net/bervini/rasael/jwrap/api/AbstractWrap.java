@@ -200,8 +200,14 @@ public abstract class AbstractWrap<T, SELF extends AbstractWrap<T, SELF>> implem
 
   @Beta
   @Tested
-  public String json() {
-    return gson.toJson(value);
+  public StringWrap json() {
+    return Wrap(gson.toJson(value));
+  }
+
+  @Beta
+  @Tested
+  public StringWrap json(boolean prettyPrint) {
+    return Wrap(prettyPrint ? prettyPrintingJson.toJson(value) : gson.toJson(value));
   }
 
   public SELF fromJson(Class<T> aClass, String json) {
@@ -217,10 +223,11 @@ public abstract class AbstractWrap<T, SELF extends AbstractWrap<T, SELF>> implem
 
     @SuppressWarnings("unchecked")
     Class<T> ofType = (Class<T>) value.getClass();
-    return fromJson(ofType, json());
+    return fromJson(ofType, json().get());
   }
 
   private static final Gson gson = new GsonBuilder().create();
+  private static final Gson prettyPrintingJson = new GsonBuilder().setPrettyPrinting().create();
 
   // -------------------------------------------------------------------------------------------------------------------
 

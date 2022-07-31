@@ -119,7 +119,7 @@ class ObjectArrayWrapTest {
   @Test
   void json() {
     String[] array = {"a","b","c"};
-    assertThat($(array).json()).isEqualTo("""
+    assertThat($(array).json().get()).isEqualTo("""
         ["a","b","c"]""");
   }
   @Test
