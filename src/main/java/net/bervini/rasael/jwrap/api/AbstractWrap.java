@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ public abstract class AbstractWrap<T, SELF extends AbstractWrap<T, SELF>> implem
   }
 
 /*
-  SELF with(T value) {
+  SELF with(E value) {
     return replicator().apply(value);
   }
 */
@@ -235,7 +235,7 @@ public abstract class AbstractWrap<T, SELF extends AbstractWrap<T, SELF>> implem
     return Wrap(String.valueOf(value));
   }
 
-//  public Stream<T> asStream() {
+//  public Stream<E> asStream() {
 //    return Stream.ofNullable(value);
 //  }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package net.bervini.rasael.jwrap.api;
+
+import net.bervini.rasael.jwrap.util.BigDecimals;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
@@ -63,8 +65,8 @@ public class BigDecimalWrap extends AbstractNumberWrap<BigDecimal, BigDecimalWra
   }
 
   @Override
-  protected BigDecimal mod(BigDecimal value, BigDecimal other) {
-    return value.remainder(other);
+  protected BigDecimal mod(BigDecimal value, BigDecimal mod) {
+    return BigDecimals.mod(value, mod);
   }
 
   @Override

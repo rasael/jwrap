@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,14 @@ import net.bervini.rasael.jwrap.util.Preconditions;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -118,6 +123,9 @@ public class JWrap {
   }
 
   @Nonnull
+  public static ThrowableWrap $(Throwable val) { return new ThrowableWrap(val);}
+
+  @Nonnull
   public static <T> ClassWrap<T> $(Class<T> val) { return new ClassWrap<>(val);}
 
   @Nonnull
@@ -165,6 +173,24 @@ public class JWrap {
   public static ColorWrap $(Color val) {
     return new ColorWrap(val);
   }
+
+  public static GraphicsWrap $(Graphics val) {
+    return new GraphicsWrap(val);
+  }
+  public static Graphics2DWrap $(Graphics2D val) {
+    return new Graphics2DWrap(val);
+  }
+
+  public static ExecutableWrap $(Executable val) {
+    return new ExecutableWrap(val);
+  }
+  public static MethodWrap $(Method val) {
+    return new MethodWrap(val);
+  }
+  public static <T> ConstructorWrap<T> $(Constructor<T> val) {
+    return new ConstructorWrap<>(val);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
 
   @Nonnull
@@ -232,6 +258,9 @@ public class JWrap {
   }
 
   @Nonnull
+  public static ThrowableWrap Wrap(Throwable val) { return new ThrowableWrap(val);}
+
+  @Nonnull
   public static <T> ClassWrap<T> Wrap(Class<T> val) { return new ClassWrap<>(val);}
 
   @Nonnull
@@ -274,6 +303,22 @@ public class JWrap {
   public static ColorWrap Wrap(Color val) {
     return new ColorWrap(val);
   }
+  public static GraphicsWrap Wrap(Graphics val) {
+    return new GraphicsWrap(val);
+  }
+  public static Graphics2DWrap Wrap(Graphics2D val) {
+    return new Graphics2DWrap(val);
+  }
+  public static ExecutableWrap Wrap(Executable val) {
+    return new ExecutableWrap(val);
+  }
+  public static MethodWrap Wrap(Method val) {
+    return new MethodWrap(val);
+  }
+  public static <T> ConstructorWrap<T> Wrap(Constructor<T> val) {
+    return new ConstructorWrap<>(val);
+  }
+
   // -------------------------------------------------------------------------------------------------------------------
 
   public static TemporalUnitOffset within(Duration duration) {

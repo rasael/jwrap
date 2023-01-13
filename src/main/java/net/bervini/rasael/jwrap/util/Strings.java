@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,6 +90,10 @@ public class Strings {
 
   public static String orNull(CharSequence s) {
     return s!=null ? s.toString() : null;
+  }
+
+  public static String orEmpty(CharSequence s) {
+    return s!=null ? s.toString() : EMPTY;
   }
 
   public static int compareIgnoreCase(CharSequence a, CharSequence b) {

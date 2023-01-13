@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,10 @@
 
 package net.bervini.rasael.jwrap.api;
 
+import net.bervini.rasael.jwrap.util.Points;
+
 import java.awt.geom.Point2D;
+import java.util.OptionalDouble;
 
 public abstract class AbstractPoint2DWrap<T extends Point2D, SELF extends AbstractPoint2DWrap<T,SELF>>
     extends AbstractWrap<T, SELF> {
@@ -33,7 +36,11 @@ public abstract class AbstractPoint2DWrap<T extends Point2D, SELF extends Abstra
     if (point==null)
       return asPoint2D();
 
-    return new Point2DWrap<>(new Point2D.Double(value.getX()-point.getX(), value.getX()-point.getY()));
+    return new Point2DWrap<>(Points.difference(value, point));
+  }
+
+  public OptionalDouble abs() {
+    return Points.abs(value);
   }
 
   public SELF translateX(int offsetX) {
