@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.RandomAccess;
+import java.util.function.Predicate;
 
 public class Lists {
 
@@ -293,5 +294,27 @@ public class Lists {
       return;
 
     dest.addAll(destPos, src.subList(srcPos, srcPos + length));
+  }
+
+  public static <E> List<List<E>> split(List<E> list, Predicate<? super E> splitCondition) {
+    Preconditions.requireArgNonNull(list);
+    Preconditions.requireArgNonNull(splitCondition);
+
+    var result = new ArrayList<List<E>>();
+    var bag = new ArrayList<E>();
+    for (E element : list) {
+      if (splitCondition.test(element)) {
+        result.add(List.copyOf(bag));
+        bag.clear();
+      }
+      else {
+        bag.add(element);
+      }
+    }
+
+    if (!bag.isEmpty()) {
+      result.add(List.copyOf(bag));
+    }
+    return result;
   }
 }
