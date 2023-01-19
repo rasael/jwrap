@@ -16,28 +16,35 @@
 
 package net.bervini.rasael.jwrap.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public interface FunctionalIterator<E> extends Iterator<E> {
 
-  default Iterator<E> prepend(E... e) {
+  default FunctionalIterator<E> prepend(E... e) {
     return Iterators.prepend(this, e);
   }
 
-  default Iterator<E> append(E... e) {
+  default FunctionalIterator<E> append(E... e) {
     return Iterators.append(this, e);
   }
 
-  default Iterator<E> filter(Predicate<? super E> predicate) {
+  default FunctionalIterator<E> filter(Predicate<? super E> predicate) {
     return Iterators.filter(this, predicate);
   }
 
-  default <R> Iterator<R> map(Function<? super E, ? extends R> filter) {
+  default <R> FunctionalIterator<R> map(Function<? super E, ? extends R> filter) {
     return Iterators.map(this, filter);
   }
 
+  default List<E> toList() {
+    var list = new ArrayList<E>();
+    forEachRemaining(list::add);
+    return List.copyOf(list);
+  }
 
   static <E> FunctionalIterator<E> of(Iterator<E> iterator) {
     return new Impl<>(iterator);

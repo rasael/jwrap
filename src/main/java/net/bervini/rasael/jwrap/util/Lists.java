@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.RandomAccess;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class Lists {
@@ -314,6 +315,20 @@ public class Lists {
 
     if (!bag.isEmpty()) {
       result.add(List.copyOf(bag));
+    }
+    return result;
+  }
+
+  public static <E, R> List<R> map(List<? extends E> list, Function<? super E, ? extends R> function) {
+    Preconditions.requireArgNonNull(function);
+
+    if (list==null) {
+      return Collections.emptyList();
+    }
+
+    var result = new ArrayList<R>(list.size());
+    for (var element : list) {
+      result.add(function.apply(element));
     }
     return result;
   }

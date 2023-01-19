@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,13 @@
 package net.bervini.rasael.jwrap.api;
 
 import net.bervini.rasael.jwrap.util.Iterables;
+import net.bervini.rasael.jwrap.util.UnsafeConsumer;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.util.Iterator;
+import java.util.Objects;
 
 @ParametersAreNullableByDefault
 public abstract class AbstractIterableWrap<
@@ -32,6 +34,13 @@ public abstract class AbstractIterableWrap<
 
   protected AbstractIterableWrap(ACTUAL value) {
     super(value);
+  }
+
+  public <X extends Throwable> void forEachChecked(UnsafeConsumer<? super ELEMENT, ? extends X> action) throws X {
+    Objects.requireNonNull(action);
+    for (ELEMENT t : this) {
+        action.accept(t);
+    }
   }
 
   @NotNull

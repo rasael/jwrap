@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,7 +104,26 @@ class StringsTest {
     assertThat(Strings.concat(Strings.EMPTY)).isEmpty();
     assertThat(Strings.concat(Strings.EMPTY, Strings.EMPTY)).isEmpty();
 
-    assertThat(Strings.concat(Strings.EMPTY, "a","b",null,"c")).isEqualTo("abnullc");
-    assertThat(Strings.concat("hello"," ", "w","orl","D")).isEqualTo("hello worlD");
+    assertThat(Strings.concat(Strings.EMPTY, "a", "b", null, "c")).isEqualTo("abnullc");
+    assertThat(Strings.concat("hello", " ", "w", "orl", "D")).isEqualTo("hello worlD");
+  }
+
+  @Test
+  void concatLines() {
+    var lines2 = String.join("\n", "a", "b");
+    var lines12 = String.join("\n", "c", "d");
+    var lines1 = String.join("\n", "e");
+    var lines3 = String.join("\n", "f", "g", "h");
+
+    assertThat(Strings.concatLines("-", lines2, lines12))
+        .isEqualTo("a-c\nb-d");
+    assertThat(Strings.concatLines("-", lines2, lines1))
+        .isEqualTo("a-e\nb");
+    assertThat(Strings.concatLines("-", lines2, lines3))
+        .isEqualTo("a-f\nb-g\nh");
+    assertThat(Strings.concatLines("-", lines1, lines2))
+        .isEqualTo("e-a\nb");
+    assertThat(Strings.concatLines("-", lines3, lines2))
+        .isEqualTo("f-a\ng-b\nh");
   }
 }

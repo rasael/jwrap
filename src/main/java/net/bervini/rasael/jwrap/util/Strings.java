@@ -146,4 +146,20 @@ public class Strings {
 
     return str;
   }
+
+  public static String concatLines(String delimiter, String s1, String s2) {
+    var l1 = s1.lines().toList();
+    var l2 = s2.lines().toList();
+    var lines = new ArrayList<String>();
+    for (int i = 0; i < l1.size(); i++) {
+      var left = l1.get(i);
+      var right = Lists.get(l2, i);
+      if (right==null) lines.add(left);
+      else lines.add(String.join(delimiter, left, right));
+    }
+    if (l2.size()>l1.size()) {
+      lines.addAll(l2.subList(l1.size(), l2.size()));
+    }
+    return String.join("\n", lines);
+  }
 }

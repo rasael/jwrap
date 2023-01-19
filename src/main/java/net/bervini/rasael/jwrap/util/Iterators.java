@@ -28,13 +28,15 @@ import java.util.stream.Stream;
 
 public class Iterators {
 
+  private static final FunctionalIterator<?> EMPTY_ITERATOR = FunctionalIterator.of(java.util.Collections.emptyIterator());
+
   private Iterators() {
   }
 
   // -------------------------------------------------------------------------------------------------------------------
 
-  public static <T> Iterator<T> empty() {
-    return java.util.Collections.emptyIterator();
+  public static <T> FunctionalIterator<T> empty() {
+    return (FunctionalIterator<T>) EMPTY_ITERATOR;
   }
 
   public static <ELEMENT> Iterator<Map.Entry<Integer, ELEMENT>> indexed(Iterator<ELEMENT> iterator) {

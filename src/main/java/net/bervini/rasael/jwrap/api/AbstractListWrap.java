@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNullableByDefault;
 import java.util.List;
+import java.util.function.Function;
 
 @ParametersAreNullableByDefault
 public abstract class AbstractListWrap<
@@ -97,4 +98,7 @@ public abstract class AbstractListWrap<
   }
 
 
+  public <R> ListWrap<R> map(Function<? super ELEMENT, ? extends R> function) {
+    return new ListWrap<>(Lists.map(value, function));
+  }
 }

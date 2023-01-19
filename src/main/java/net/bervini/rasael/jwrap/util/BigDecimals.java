@@ -39,6 +39,16 @@ public class BigDecimals {
       return !(n instanceof Integer) && !(n instanceof Long) && !(n instanceof Byte) && !(n instanceof Short) ? new BigDecimal(n.toString()) : BigDecimal.valueOf(n.longValue());
     }
   }
+
+  public static boolean isNumber(String s) {
+    try {
+      new BigDecimal(s);
+      return true;
+    }
+    catch (NumberFormatException e) {
+      return false;
+    }
+  }
   public static BigDecimal mod(BigDecimal value, BigDecimal mod) {
     return value.remainder(mod);
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,5 +94,13 @@ public class Predicates {
 
   public static <T> Predicate<T> rejectAll() {
     return t -> false;
+  }
+
+  public static <T> Predicate<T> isInstanceOf(Class<?> type) {
+    return t -> type!=null && type.isInstance(t);
+  }
+
+  public static <T> Predicate<T> isNotInstanceOf(Class<?> type) {
+    return t -> type==null || !type.isInstance(t);
   }
 }
