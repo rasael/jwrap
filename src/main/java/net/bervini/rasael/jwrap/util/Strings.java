@@ -35,8 +35,7 @@ public class Strings {
   public static final String NULL = null;
 
   public static final String EMPTY = "";
-
-  private static final String[] EMPTY_ARRAY = {};
+  public static final String[] EMPTY_ARRAY = {};
 
   private Strings(){}
 
@@ -161,5 +160,17 @@ public class Strings {
       lines.addAll(l2.subList(l1.size(), l2.size()));
     }
     return String.join("\n", lines);
+  }
+
+  public static String toUpperCase(String input) {
+    return input!=null ? input.toUpperCase() : null;
+  }
+
+  public static String toLowerCase(String input) {
+    return input!=null ? input.toLowerCase() : null;
+  }
+
+  public static boolean isJavaIdentifier(String input) {
+    return CharSequences.isJavaIdentifier(input);
   }
 }

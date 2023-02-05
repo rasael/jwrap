@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,5 +106,12 @@ class CharSequencesTest {
             "some <text attribute='hello' ></text >",
             "some <text attribute=\"hello\" ></text >"
         );
+  }
+
+  @Test
+  void isJavaIdentifier() {
+    assertThat((Predicate<CharSequence>) CharSequences::isJavaIdentifier)
+        .accepts("a","a1","A1","a$1","a_1","_1")
+        .rejects(" a","a a", "1b", "test,test","a.b.c");
   }
 }

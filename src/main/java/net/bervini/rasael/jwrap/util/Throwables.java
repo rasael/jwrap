@@ -18,6 +18,7 @@ package net.bervini.rasael.jwrap.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Objects;
 
 public class Throwables {
 
@@ -34,5 +35,26 @@ public class Throwables {
       throwable = sw.toString();
     }
     return throwable;
+  }
+
+  public static StringList collectAllMessages(Throwable throwable, boolean includeCurrent) {
+    Objects.requireNonNull(throwable, "throwable");
+    return collectMessages(throwable, includeCurrent);
+  }
+
+  private static StringList collectMessages(Throwable t, boolean add) {
+    var list = StringList.newStringList();
+    if (add) list.add(t.getMessage());
+
+    for (var suppressed : t.getSuppressed()) {
+      list.addAll(collectMessages(suppressed, true));
+    }
+
+    var cause = t.getCause();
+    if (cause!=null) {
+      list.addAll(collectMessages(cause, true));
+    }
+
+    return list;
   }
 }

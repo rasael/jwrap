@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Rasael Bervini
+ * Copyright 2022-2023 Rasael Bervini
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -154,5 +154,20 @@ public class CharSequences {
     }
 
     return false;
+  }
+
+  public static boolean isJavaIdentifier(CharSequence input) {
+    if (isEmpty(input))
+      return false;
+
+    if (!Character.isJavaIdentifierStart(input.charAt(0)))
+      return false;
+
+    for (int i = 1; i < input.length(); i++) {
+      if (!Character.isJavaIdentifierPart(input.charAt(i)))
+        return false;
+    }
+
+    return true;
   }
 }
